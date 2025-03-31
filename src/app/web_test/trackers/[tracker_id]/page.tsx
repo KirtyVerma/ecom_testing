@@ -7,11 +7,22 @@ import DynamicInputForm from "../../DynamicInputForm";
 import TEMP from "./temp";
 import { Button } from "@/components/ui/button";
 import { Toast, useGetTrackerConfig, useUpdateTrackerConfig } from "../../api";
+import { QueryClient, QueryClientProvider } from "react-query";
 import Loader from "../../Loader";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 
-export default function TrackerConfig() {
+const queryClient = new QueryClient();
+
+export default function Page() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <TrackerConfig />
+    </QueryClientProvider>
+  );
+}
+
+function TrackerConfig() {
   const trackerId: any = useParams().tracker_id;
   const tracker_name: any = useParams().tracker_name;
   const { data: trackerFields, isLoading } = useGetTrackerConfig(trackerId);
@@ -20,7 +31,8 @@ export default function TrackerConfig() {
     data: updateRes,
     isLoading: resLoading,
   } = useUpdateTrackerConfig();
-  const formRef: any = useRef();
+  //const formRef: any = useRef();
+  const formRef = useRef<HTMLFormElement>(null);
   // Dummy code to display on the right side
   function handleSubmit() {
     const formData = formRef?.current?.values;
@@ -94,3 +106,4 @@ export default function TrackerConfig() {
     </div>
   );
 }
+

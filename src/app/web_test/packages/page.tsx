@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import { QueryClient, QueryClientProvider } from "react-query";
 import { PACKAGES } from "../DATA";
 import { Button } from "@/components/ui/button";
 import ItemTable from "./ItemTable";
@@ -7,7 +8,9 @@ import { useRouter } from "next/navigation";
 import { useGetPackages } from "../api";
 import Loader from "../Loader";
 
-export default function ListPackages() {
+const queryClient = new QueryClient();
+
+function PackagesList() {
   const router = useRouter();
   const { data, isLoading } = useGetPackages();
   const handleRowClick = (pkg: (typeof PACKAGES)[0]) => {
@@ -25,12 +28,20 @@ export default function ListPackages() {
       <div className="w-full px-3 py-2 bg-white dark:bg-gray-300 rounded-xl mt-5">
         {isLoading ? (
           <Loader />
-        ) : data.length ? (
+        ) : data?.length ? (
           <ItemTable data={data} onclick={handleRowClick} />
         ) : (
           <p className="capitalize text-center"> No Package available</p>
         )}
       </div>
     </div>
+  );
+}
+
+export default function Page() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <PackagesList />
+    </QueryClientProvider>
   );
 }

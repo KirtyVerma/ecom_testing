@@ -2,6 +2,7 @@
 
 import { useParams } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
+import { QueryClient, QueryClientProvider } from "react-query";
 import CodeBlock from "../../../CodeBlock";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -18,7 +19,16 @@ import { Button } from "@/components/ui/button";
 import Loader from "../../../Loader";
 import DynamicInputForm from "../../../DynamicInputForm";
 
-export default function CreateTracker() {
+const queryClient = new QueryClient();
+
+export default function Page() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <CreateTracker />
+    </QueryClientProvider>
+  );
+}
+function CreateTracker() {
   const packageName = useParams().package_name;
   const {
     mutate: createTracker,
@@ -26,7 +36,7 @@ export default function CreateTracker() {
     isLoading: ctl,
   } = useCreateTracker();
   const { data: platforms, isLoading } = useGetPlatforms();
-  const formRef: any = useRef();
+  const formRef = useRef<HTMLFormElement>(null);
   const [values, setValues] = useState({
     package_name: packageName,
     tracker_name: "",

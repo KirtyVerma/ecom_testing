@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import { QueryClient, QueryClientProvider } from "react-query";
 import { TRACKER } from "../../DATA";
 import { Button } from "@/components/ui/button";
 import ItemTable from "../ItemTable";
@@ -15,7 +16,17 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-export default function ListTrackers() {
+const queryClient = new QueryClient();
+
+export default function Page() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <ListTrackers />
+    </QueryClientProvider>
+  );
+}
+
+function ListTrackers() {
   const packageName: any = useParams()?.package_name;
   const { data, isLoading, refetch } = useGetTrackers(packageName);
   const extrafields = [
@@ -88,7 +99,7 @@ function ActionButton({ packageName, trackerId, cb }: any) {
           <TooltipTrigger asChild>
             <Button
               onClick={() =>
-                nav.push(`/webfraud/web_test/trackers/${trackerId}`)
+                nav.push(`/web_test/trackers/${trackerId}`)
               }
               className="p-0 bg-transparent text-gray-400 dark:text-white "
             >

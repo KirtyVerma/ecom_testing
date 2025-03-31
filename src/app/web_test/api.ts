@@ -1,5 +1,5 @@
 import { toast, useToast } from "@/hooks/use-toast";
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import {useMutation,useQuery,useQueryClient} from "react-query"
 import { PACKAGES, TRACKER } from "./DATA";
 import axios from "axios";
 
